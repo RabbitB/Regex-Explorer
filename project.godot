@@ -1,0 +1,46 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "ProjectTools",
+"language": "GDScript",
+"path": "res://ProjectTools.gd"
+} ]
+_global_script_class_icons={
+"ProjectTools": ""
+}
+
+[application]
+
+config/name="Regex Explorer"
+run/main_scene="res://Explorer.tscn"
+run/low_processor_mode=true
+config/icon="res://icon.png"
+
+[debug]
+
+gdscript/warnings/unused_argument=false
+gdscript/warnings/return_value_discarded=false
+
+[display]
+
+window/size/resizable=false
+window/energy_saving/keep_screen_on=false
+window/size_constraints/min_size=Vector2( 500, 500 )
+
+[gui]
+
+theme/custom="res://alien_theme.tres"
+
+[rendering]
+
+environment/default_clear_color=Color( 0.133333, 0.133333, 0.133333, 1 )
+environment/default_environment="res://default_env.tres"
