@@ -1,0 +1,120 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://regex_rule/regex_rule.gd" type="Script" id=1]
+[ext_resource path="res://regex_rule/delete_rule/minus.png" type="Texture" id=2]
+[ext_resource path="res://regex_rule/delete_rule/minus_down.png" type="Texture" id=3]
+[ext_resource path="res://regex_rule/delete_rule/minus_hover.png" type="Texture" id=4]
+[ext_resource path="res://regex_rule/add_rule/plus.png" type="Texture" id=5]
+[ext_resource path="res://regex_rule/add_rule/plus_down.png" type="Texture" id=6]
+[ext_resource path="res://regex_rule/add_rule/plus_hover.png" type="Texture" id=7]
+[ext_resource path="res://regex_rule/rule_visibility/visible_indicator.png" type="Texture" id=8]
+[ext_resource path="res://regex_rule/rule_visibility/visible_indicator_hover.png" type="Texture" id=9]
+[ext_resource path="res://regex_rule/rule_visibility/invisible_indicator.png" type="Texture" id=10]
+[ext_resource path="res://regex_rule/regex_valid_indicator.png" type="Texture" id=11]
+[ext_resource path="res://validation_indicator.gd" type="Script" id=12]
+
+[node name="RegexRule" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -576.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource( 1 )
+
+[node name="DeleteRegexButton" type="TextureButton" parent="."]
+margin_top = 4.0
+margin_right = 16.0
+margin_bottom = 20.0
+hint_tooltip = "Delete this regex rule."
+focus_mode = 0
+size_flags_vertical = 4
+enabled_focus_mode = 0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 4 )
+texture_disabled = ExtResource( 3 )
+
+[node name="AddNewRegexButton" type="TextureButton" parent="."]
+margin_left = 20.0
+margin_top = 4.0
+margin_right = 36.0
+margin_bottom = 20.0
+hint_tooltip = "Add a new regex rule."
+focus_mode = 0
+size_flags_vertical = 4
+enabled_focus_mode = 0
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 7 )
+texture_disabled = ExtResource( 6 )
+
+[node name="ReviewRuleRollover" type="TextureButton" parent="."]
+margin_left = 40.0
+margin_top = 4.0
+margin_right = 56.0
+margin_bottom = 20.0
+hint_tooltip = "View changes made up to and including this rule."
+focus_mode = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+enabled_focus_mode = 0
+texture_normal = ExtResource( 8 )
+texture_hover = ExtResource( 9 )
+texture_disabled = ExtResource( 10 )
+
+[node name="ValidRegexIndicator" type="TextureRect" parent="."]
+margin_left = 60.0
+margin_top = 4.0
+margin_right = 76.0
+margin_bottom = 20.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 11 )
+script = ExtResource( 12 )
+
+[node name="RegexLineEdit" type="LineEdit" parent="."]
+margin_left = 80.0
+margin_right = 409.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+placeholder_text = "Regular Expression"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="Label" type="Label" parent="."]
+margin_left = 413.0
+margin_top = 1.0
+margin_right = 499.0
+margin_bottom = 23.0
+text = "replace with"
+align = 1
+valign = 3
+
+[node name="ReplacementLineEdit" type="LineEdit" parent="."]
+margin_left = 503.0
+margin_right = 832.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+placeholder_text = "Replacement Text"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="AffectsSelectedFilesCheckBox" type="CheckBox" parent="."]
+margin_left = 836.0
+margin_right = 1023.0
+margin_bottom = 24.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Only affect selected files"
+
+[node name="RegexCompileTimer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+[connection signal="pressed" from="DeleteRegexButton" to="." method="_on_DeleteRegexButton_pressed"]
+[connection signal="pressed" from="AddNewRegexButton" to="." method="_on_AddNewRegexButton_pressed"]
+[connection signal="mouse_entered" from="ReviewRuleRollover" to="." method="_on_ReviewRuleRollover_mouse_entered"]
+[connection signal="mouse_exited" from="ReviewRuleRollover" to="." method="_on_ReviewRuleRollover_mouse_exited"]
+[connection signal="text_changed" from="RegexLineEdit" to="." method="_on_RegexLineEdit_text_changed"]
+[connection signal="text_changed" from="ReplacementLineEdit" to="." method="_on_ReplacementLineEdit_text_changed"]
+[connection signal="toggled" from="AffectsSelectedFilesCheckBox" to="." method="_on_AffectsSelectedFilesCheckBox_toggled"]
+[connection signal="timeout" from="RegexCompileTimer" to="." method="_on_RegexCompileTimer_timeout"]

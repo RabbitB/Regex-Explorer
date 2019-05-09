@@ -1,6 +1,6 @@
 extends Control
 
-const RegexRuleContainer: Script = preload("res://RegexRuleContainer/RegexRuleContainer.gd")
+const RegexRuleContainer: Script = preload("res://regex_rule_container/regex_rule_container.gd")
 
 export (Color) var InvalidFileNameHighlightColor = Color8(211, 71, 74)
 export (Color) var ModifiedFileNameHighlightColor = Color8(236, 131, 60)
@@ -12,36 +12,6 @@ onready var RegexRuleController: RegexRuleContainer = $MainVBoxContainer/FileSpl
 
 var _target_dir: Directory = Directory.new()
 
-func read_dir_contents(dir_path: String) -> void:
-
-	OriginalFileList.clear()
-	assert(_target_dir.dir_exists(dir_path))
-
-	_target_dir.open(dir_path)
-	_target_dir.list_dir_begin(true, true)
-
-	var next_item : String = _target_dir.get_next()
-
-	while !next_item.empty():
-
-		if _target_dir.current_is_dir():
-
-			OriginalFileList.add_item(next_item, preload("res://directory_icon.png"))
-
-		else:
-
-			OriginalFileList.add_item(next_item)
-
-		next_item = _target_dir.get_next()
-
-	_update_file_output()
-
-func preview_list_contains_item_text(item_text: String) -> int:
-
-	for i in range(PreviewFileList.get_item_count()):
-		if PreviewFileList.get_item_text(i) == item_text: return i
-
-	return -1
 
 func _update_file_output():
 
@@ -49,7 +19,7 @@ func _update_file_output():
 
 	for i in range(OriginalFileList.get_item_count()):
 
-		var new_file_name: String = RegexRuleController.process_string(OriginalFileList.get_item_text(i), OriginalFileList.is_selected(i))
+		var new_file_name: String = RegexRuleController.process_string(OriginalFileList.get_item_text(i), OriginalFileList.is_selected(i), true)
 		var sanitized_file_name = _sanitize_file_name(new_file_name)
 
 		var validating_regex: RegEx = RegEx.new()
@@ -84,6 +54,7 @@ func _update_file_output():
 		var file_icon: Texture = OriginalFileList.get_item_icon(i)
 		if file_icon: PreviewFileList.set_item_icon(i, file_icon)
 
+
 func _sanitize_file_name(file_name: String) -> String:
 
 	var sanitizing_regex: RegEx = RegEx.new()
@@ -102,10 +73,45 @@ func _sanitize_file_name(file_name: String) -> String:
 
 	return file_name
 
+
+func read_dir_contents(dir_path: String) -> void:
+
+	OriginalFileList.clear()
+	assert(_target_dir.dir_exists(dir_path))
+
+	_target_dir.open(dir_path)
+	_target_dir.list_dir_begin(true, true)
+
+	var next_item : String = _target_dir.get_next()
+
+	while !next_item.empty():
+
+		if _target_dir.current_is_dir():
+
+			OriginalFileList.add_item(next_item, preload("res://directory_icon.png"))
+
+		else:
+
+			OriginalFileList.add_item(next_item)
+
+		next_item = _target_dir.get_next()
+
+	_update_file_output()
+
+
+func preview_list_contains_item_text(item_text: String) -> int:
+
+	for i in range(PreviewFileList.get_item_count()):
+		if PreviewFileList.get_item_text(i) == item_text: return i
+
+	return -1
+
+
 func _on_ExplorerAddressBar_path_changed(path: String, is_path_valid: bool):
 
 	ValidDirIndicator.valid = is_path_valid
 	if is_path_valid: read_dir_contents(path)
+
 
 func _on_RenameFilesButton_pressed():
 
@@ -122,3 +128,5 @@ func _on_RenameFilesButton_pressed():
 func _on_OriginalFileList_multi_selected(index, selected):
 
 	_update_file_output()
+
+

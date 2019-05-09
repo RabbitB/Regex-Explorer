@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "ProjectTools",
 "language": "GDScript",
-"path": "res://ProjectTools.gd"
+"path": "res://project_tools.gd"
 } ]
 _global_script_class_icons={
 "ProjectTools": ""
@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Regex Explorer"
-run/main_scene="res://Explorer.tscn"
+run/main_scene="res://explorer.tscn"
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
