@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Regex Explorer"
-run/main_scene="res://explorer.tscn"
+run/main_scene="res://explorer/explorer.tscn"
 run/low_processor_mode=true
 config/icon="res://icon.png"
 

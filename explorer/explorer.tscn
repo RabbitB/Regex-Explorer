@@ -1,11 +1,13 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://alien_theme.tres" type="Theme" id=1]
-[ext_resource path="res://explorer.gd" type="Script" id=2]
+[ext_resource path="res://explorer/explorer.gd" type="Script" id=2]
 [ext_resource path="res://explorer_address_bar/explorer_address_bar.tscn" type="PackedScene" id=3]
-[ext_resource path="res://validation_indicator.gd" type="Script" id=4]
+[ext_resource path="res://explorer/validation_indicator.gd" type="Script" id=4]
 [ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=5]
 [ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=6]
+
+
 
 [node name="Explorer" type="Control"]
 anchor_right = 1.0
