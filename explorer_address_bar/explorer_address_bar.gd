@@ -71,9 +71,17 @@ func get_dir_contents() -> Array:
 	return dir_contents
 
 
-func is_path_valid() -> bool:
+func get_active_path() -> String:
 
-	return _target_dir.dir_exists(AddressLineEdit.text) && AddressLineEdit.text.is_abs_path()
+	return _target_dir.get_current_dir()
+
+
+func is_path_valid(a_path: String = "") -> bool:
+
+	if a_path.empty():
+		a_path = self.path
+
+	return _target_dir.dir_exists(a_path) && a_path.is_abs_path()
 
 
 func encountered_error() -> int:

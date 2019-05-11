@@ -7,8 +7,6 @@
 [ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=5]
 [ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=6]
 
-
-
 [node name="Explorer" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -93,5 +91,5 @@ text = "Rename Files"
 [connection signal="path_changed" from="MainVBoxContainer/ExplorerAddressBar" to="." method="_on_ExplorerAddressBar_path_changed" flags=3]
 [connection signal="item_activated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_item_activated"]
 [connection signal="multi_selected" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_multi_selected"]
-[connection signal="rules_updated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer/RegexRuleContainer" to="." method="_update_file_output" flags=3]
+[connection signal="rules_updated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer/RegexRuleContainer" to="." method="_update_file_output" flags=3 binds= [ true ]]
 [connection signal="pressed" from="MainVBoxContainer/RenameFilesButton" to="." method="_on_RenameFilesButton_pressed"]
