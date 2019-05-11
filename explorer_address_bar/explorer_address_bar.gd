@@ -3,15 +3,17 @@ extends HBoxContainer
 signal path_changed(path, is_path_valid)
 
 onready var BrowseFileDialog: FileDialog = $FileDialog as FileDialog
-
 onready var AddressLineEdit: LineEdit = $AddressLineEdit as LineEdit
 
-#warning-ignore:unused_class_variable
-var path: String setget , _get_path
-#warning-ignore:unused_class_variable
-var is_path_valid: bool setget , _get_is_path_valid
+var path: String setget _set_path, _get_path
 
+var _error: int = OK
 var _target_dir: Directory = Directory.new()
+
+
+func _set_path(new_path: String) -> void:
+
+	update_path(new_path, true)
 
 
 func _get_path() -> String:
@@ -19,36 +21,76 @@ func _get_path() -> String:
 	return AddressLineEdit.text
 
 
-func _get_is_path_valid() -> bool:
-
-	return _target_dir.dir_exists(AddressLineEdit.text) && AddressLineEdit.text.is_abs_path()
-
-
 func _ready() -> void:
 
 	update_path(OS.get_executable_path().get_base_dir(), true)
 
 
-func update_path(new_path: String, update_ui_text: bool = false) -> void:
+func update_path(new_path: String, update_ui_text: bool) -> void:
 
 	if update_ui_text: AddressLineEdit.text = new_path
 
-	if _get_is_path_valid():
+	if is_path_valid():
 
-		_target_dir.open(_get_path())
-		BrowseFileDialog.current_dir = _get_path()
+		_error = _target_dir.open(self.path)
 
-	emit_signal("path_changed", new_path, _get_is_path_valid())
+		if !_error:
+			BrowseFileDialog.current_dir = self.path
+
+	emit_signal("path_changed", new_path, is_path_valid())
+
+
+func get_directory() -> Directory:
+
+	return _target_dir if is_path_valid() && !_error else null
+
+
+func get_dir_contents() -> Array:
+
+	var dir_contents: Array = []
+
+	if !is_path_valid() || _error:
+		return dir_contents
+
+	_error = _target_dir.list_dir_begin(true, true)
+
+	if _error:
+		return dir_contents
+
+	var next_item: String = _target_dir.get_next()
+
+	while !next_item.empty():
+
+		var item_info: Dictionary = { "name": next_item, "is_dir": _target_dir.current_is_dir() }
+		dir_contents.append(item_info)
+
+		next_item = _target_dir.get_next()
+
+	_target_dir.list_dir_end()
+
+	return dir_contents
+
+
+func is_path_valid() -> bool:
+
+	return _target_dir.dir_exists(AddressLineEdit.text) && AddressLineEdit.text.is_abs_path()
+
+
+func encountered_error() -> int:
+
+	return _error
 
 
 func _on_AddressLineEdit_text_changed(new_text: String) -> void:
 
-	update_path(new_text)
+	update_path(new_text, false)
 
 
 func _on_UpDirButton_pressed() -> void:
 
-	_target_dir.change_dir("..")
+	if is_path_valid() && !_error:
+		_error = _target_dir.change_dir("..")
+
 	update_path(_target_dir.get_current_dir(), true)
 
 
