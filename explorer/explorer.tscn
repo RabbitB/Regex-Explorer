@@ -1,11 +1,15 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://alien_theme.tres" type="Theme" id=1]
 [ext_resource path="res://explorer/explorer.gd" type="Script" id=2]
 [ext_resource path="res://explorer_address_bar/explorer_address_bar.tscn" type="PackedScene" id=3]
 [ext_resource path="res://explorer/validation_indicator.gd" type="Script" id=4]
-[ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=5]
-[ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=6]
+[ext_resource path="res://vtri_split_container/vtri_split_container.gd" type="Script" id=5]
+[ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=6]
+[ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=7]
+
+
+
 
 [node name="Explorer" type="Control"]
 anchor_right = 1.0
@@ -48,6 +52,7 @@ size_flags_vertical = 3
 margin_right = 1016.0
 margin_bottom = 262.0
 size_flags_vertical = 3
+script = ExtResource( 5 )
 
 [node name="OriginalFileList" type="ItemList" parent="MainVBoxContainer/FileSplitContainer/RuleSplitContainer"]
 margin_right = 1016.0
@@ -64,7 +69,7 @@ margin_bottom = 262.0
 rect_min_size = Vector2( 0, 65 )
 scroll_horizontal_enabled = false
 
-[node name="RegexRuleContainer" parent="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer" instance=ExtResource( 5 )]
+[node name="RegexRuleContainer" parent="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 2.0
@@ -87,7 +92,7 @@ margin_right = 1016.0
 margin_bottom = 592.0
 text = "Rename Files"
 
-[node name="WindowResizeHandles" parent="." instance=ExtResource( 6 )]
+[node name="WindowResizeHandles" parent="." instance=ExtResource( 7 )]
 [connection signal="path_changed" from="MainVBoxContainer/ExplorerAddressBar" to="." method="_on_ExplorerAddressBar_path_changed" flags=3]
 [connection signal="item_activated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_item_activated"]
 [connection signal="multi_selected" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_multi_selected"]
