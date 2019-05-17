@@ -8,9 +8,6 @@
 [ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=6]
 [ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=7]
 
-
-
-
 [node name="Explorer" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -86,10 +83,21 @@ margin_bottom = 532.0
 rect_min_size = Vector2( 0, 150 )
 size_flags_vertical = 3
 
-[node name="RenameFilesButton" type="Button" parent="MainVBoxContainer"]
+[node name="ButtonHBoxContainer" type="HBoxContainer" parent="MainVBoxContainer"]
 margin_top = 570.0
 margin_right = 1016.0
 margin_bottom = 592.0
+
+[node name="RegexLibraryButton" type="Button" parent="MainVBoxContainer/ButtonHBoxContainer"]
+margin_right = 97.0
+margin_bottom = 22.0
+text = "Regex Library"
+
+[node name="RenameFilesButton" type="Button" parent="MainVBoxContainer/ButtonHBoxContainer"]
+margin_left = 101.0
+margin_right = 1016.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
 text = "Rename Files"
 
 [node name="WindowResizeHandles" parent="." instance=ExtResource( 7 )]
@@ -97,4 +105,4 @@ text = "Rename Files"
 [connection signal="item_activated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_item_activated"]
 [connection signal="multi_selected" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_multi_selected"]
 [connection signal="rules_updated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer/RegexRuleContainer" to="." method="_update_file_output" flags=3 binds= [ true ]]
-[connection signal="pressed" from="MainVBoxContainer/RenameFilesButton" to="." method="_on_RenameFilesButton_pressed"]
+[connection signal="pressed" from="MainVBoxContainer/ButtonHBoxContainer/RenameFilesButton" to="." method="_on_RenameFilesButton_pressed"]

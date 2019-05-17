@@ -11,7 +11,7 @@ onready var _ValidDirIndicator: ColorRect = $MainVBoxContainer/ValidDirIndicator
 onready var _OriginalFileList: ItemList = $MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList as ItemList
 onready var _PreviewFileList: ItemList = $MainVBoxContainer/FileSplitContainer/PreviewFileList as ItemList
 onready var _RegexRuleController: RegexRuleContainer = $MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer/RegexRuleContainer as RegexRuleContainer
-onready var _RenameFilesButton: Button = $MainVBoxContainer/RenameFilesButton as Button
+onready var _RenameFilesButton: Button = $MainVBoxContainer/ButtonHBoxContainer/RenameFilesButton as Button
 
 
 func _update_file_output(review_mode: bool):
