@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://regex_rule/regex_rule.gd" type="Script" id=1]
 [ext_resource path="res://regex_rule/delete_rule/minus.png" type="Texture" id=2]
@@ -12,6 +12,9 @@
 [ext_resource path="res://regex_rule/rule_visibility/invisible_indicator.png" type="Texture" id=10]
 [ext_resource path="res://regex_rule/regex_valid_indicator.png" type="Texture" id=11]
 [ext_resource path="res://explorer/validation_indicator.gd" type="Script" id=12]
+[ext_resource path="res://regex_rule/rule_swap_direction/rule_swap_direction.png" type="Texture" id=13]
+[ext_resource path="res://regex_rule/rule_swap_direction/rule_swap_direction_down.png" type="Texture" id=14]
+[ext_resource path="res://regex_rule/rule_swap_direction/rule_swap_direction_hover.png" type="Texture" id=15]
 
 [node name="RegexRule" type="HBoxContainer"]
 anchor_right = 1.0
@@ -74,24 +77,30 @@ script = ExtResource( 12 )
 
 [node name="RegexLineEdit" type="LineEdit" parent="."]
 margin_left = 80.0
-margin_right = 409.0
+margin_right = 444.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 placeholder_text = "Regular Expression"
 caret_blink = true
 caret_blink_speed = 0.5
 
-[node name="Label" type="Label" parent="."]
-margin_left = 413.0
-margin_top = 1.0
-margin_right = 499.0
-margin_bottom = 23.0
-text = "replace with"
-align = 1
-valign = 3
+[node name="SwapRuleDirectionButton" type="TextureButton" parent="."]
+margin_left = 448.0
+margin_top = 4.0
+margin_right = 464.0
+margin_bottom = 20.0
+hint_tooltip = "Swap the regular expression with the replacement text."
+focus_mode = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+enabled_focus_mode = 0
+texture_normal = ExtResource( 13 )
+texture_pressed = ExtResource( 14 )
+texture_hover = ExtResource( 15 )
+texture_disabled = ExtResource( 14 )
 
 [node name="ReplacementLineEdit" type="LineEdit" parent="."]
-margin_left = 503.0
+margin_left = 468.0
 margin_right = 832.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
@@ -115,6 +124,7 @@ one_shot = true
 [connection signal="mouse_entered" from="ReviewRuleRollover" to="." method="_on_ReviewRuleRollover_mouse_entered"]
 [connection signal="mouse_exited" from="ReviewRuleRollover" to="." method="_on_ReviewRuleRollover_mouse_exited"]
 [connection signal="text_changed" from="RegexLineEdit" to="." method="_on_RegexLineEdit_text_changed"]
+[connection signal="pressed" from="SwapRuleDirectionButton" to="." method="_on_SwapRuleDirectionButton_pressed"]
 [connection signal="text_changed" from="ReplacementLineEdit" to="." method="_on_ReplacementLineEdit_text_changed"]
 [connection signal="toggled" from="AffectsSelectedFilesCheckBox" to="." method="_on_AffectsSelectedFilesCheckBox_toggled"]
 [connection signal="timeout" from="RegexCompileTimer" to="." method="_on_RegexCompileTimer_timeout"]

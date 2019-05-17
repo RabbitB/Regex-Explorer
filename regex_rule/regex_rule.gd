@@ -112,3 +112,13 @@ func _on_ReviewRuleRollover_mouse_exited():
 
 	emit_signal("review_rule_toggled", false)
 
+
+func _on_SwapRuleDirectionButton_pressed():
+
+	var regex_text = _RegexLineEdit.text
+
+	_RegexLineEdit.text = _ReplacementLineEdit.text
+	_ReplacementLineEdit.text = regex_text
+
+	compile_regex()
+
