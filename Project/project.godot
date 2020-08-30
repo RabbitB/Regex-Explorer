@@ -76,10 +76,13 @@ _global_script_class_icons={
 
 config/name="Regex Explorer"
 run/main_scene="res://explorer/explorer.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="dfaction/regex_explorer"
 run/low_processor_mode=true
 boot_splash/image="res://icon/splash.png"
 boot_splash/fullsize=false
 config/icon="res://icon/icon.png"
+config/windows_native_icon="res://icon/icon.ico"
 
 [debug]
 
@@ -91,6 +94,10 @@ gdscript/warnings/return_value_discarded=false
 window/size/resizable=false
 window/energy_saving/keep_screen_on=false
 window/size_constraints/min_size=Vector2( 500, 500 )
+
+[editor_plugins]
+
+enabled=PoolStringArray( "chino" )
 
 [gui]
 
