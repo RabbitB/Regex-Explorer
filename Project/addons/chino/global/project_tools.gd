@@ -1,5 +1,6 @@
-extends Reference
 class_name ProjectTools
+extends Reference
+#	Functions for manipulating project settings and other aspects of the project itself.
 
 
 static func try_register_project_setting(
