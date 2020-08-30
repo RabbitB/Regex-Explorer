@@ -1,0 +1,102 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "ArrayHelper",
+"language": "GDScript",
+"path": "res://addons/chino/global/array_helper.gd"
+}, {
+"base": "Reference",
+"class": "DictionaryHelper",
+"language": "GDScript",
+"path": "res://addons/chino/global/dictionary_helper.gd"
+}, {
+"base": "Reference",
+"class": "FileSystemItem",
+"language": "GDScript",
+"path": "res://addons/chino/references/file_system_item.gd"
+}, {
+"base": "HSplitContainer",
+"class": "HSplitRatioContainer",
+"language": "GDScript",
+"path": "res://addons/chino/nodes/h_split_ratio_container.gd"
+}, {
+"base": "Reference",
+"class": "Log",
+"language": "GDScript",
+"path": "res://addons/chino/global/log.gd"
+}, {
+"base": "Container",
+"class": "Node2DContainer",
+"language": "GDScript",
+"path": "res://addons/chino/nodes/node_2d_container.gd"
+}, {
+"base": "Reference",
+"class": "NodeHelper",
+"language": "GDScript",
+"path": "res://addons/chino/global/node_helper.gd"
+}, {
+"base": "Reference",
+"class": "ProjectTools",
+"language": "GDScript",
+"path": "res://addons/chino/global/project_tools.gd"
+}, {
+"base": "Reference",
+"class": "TreeHelper",
+"language": "GDScript",
+"path": "res://addons/chino/global/tree_helper.gd"
+}, {
+"base": "Reference",
+"class": "TreeItemHelper",
+"language": "GDScript",
+"path": "res://addons/chino/global/tree_item_helper.gd"
+} ]
+_global_script_class_icons={
+"ArrayHelper": "",
+"DictionaryHelper": "",
+"FileSystemItem": "",
+"HSplitRatioContainer": "",
+"Log": "",
+"Node2DContainer": "",
+"NodeHelper": "",
+"ProjectTools": "",
+"TreeHelper": "",
+"TreeItemHelper": ""
+}
+
+[application]
+
+config/name="Regex Explorer"
+run/main_scene="res://explorer/explorer.tscn"
+run/low_processor_mode=true
+boot_splash/image="res://icon/splash.png"
+boot_splash/fullsize=false
+config/icon="res://icon/icon.png"
+
+[debug]
+
+gdscript/warnings/unused_argument=false
+gdscript/warnings/return_value_discarded=false
+
+[display]
+
+window/size/resizable=false
+window/energy_saving/keep_screen_on=false
+window/size_constraints/min_size=Vector2( 500, 500 )
+
+[gui]
+
+theme/custom="res://alien_theme.tres"
+
+[rendering]
+
+environment/default_clear_color=Color( 0.133333, 0.133333, 0.133333, 1 )
+environment/default_environment="res://default_env.tres"

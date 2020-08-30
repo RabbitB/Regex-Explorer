@@ -69,10 +69,8 @@ scroll_horizontal_enabled = false
 [node name="RegexRuleContainer" parent="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 1014.0
-margin_bottom = 63.0
+margin_right = 1016.0
+margin_bottom = 65.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
