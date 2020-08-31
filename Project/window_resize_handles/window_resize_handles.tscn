@@ -1,9 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://window_resize_handles/window_resize_handle.png" type="Texture" id=1]
-[ext_resource path="res://window_resize_handles/window_resize_handles.gd" type="Script" id=2]
-
-
+[ext_resource path="res://window_resize_handles/window_resize_handle.gd" type="Script" id=2]
 
 [node name="WindowResizeHandles" type="Control"]
 anchor_right = 1.0
@@ -62,4 +60,3 @@ mouse_default_cursor_shape = 9
 size_flags_vertical = 8
 script = ExtResource( 2 )
 handle_type = 2
-

@@ -58,6 +58,11 @@ _global_script_classes=[ {
 "class": "TreeItemHelper",
 "language": "GDScript",
 "path": "res://addons/chino/global/tree_item_helper.gd"
+}, {
+"base": "Reference",
+"class": "WindowResizeHandle",
+"language": "GDScript",
+"path": "res://window_resize_handles/window_resize_handle.gd"
 } ]
 _global_script_class_icons={
 "ArrayHelper": "",
@@ -69,7 +74,8 @@ _global_script_class_icons={
 "NodeHelper": "",
 "ProjectTools": "",
 "TreeHelper": "",
-"TreeItemHelper": ""
+"TreeItemHelper": "",
+"WindowResizeHandle": ""
 }
 
 [application]
