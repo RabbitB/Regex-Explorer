@@ -59,6 +59,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/chino/global/tree_item_helper.gd"
 }, {
+"base": "VSplitContainer",
+"class": "VTripleSplitContainer",
+"language": "GDScript",
+"path": "res://vtriple_split_container/vtriple_split_container.gd"
+}, {
 "base": "Reference",
 "class": "WindowResizeHandle",
 "language": "GDScript",
@@ -75,6 +80,7 @@ _global_script_class_icons={
 "ProjectTools": "",
 "TreeHelper": "",
 "TreeItemHelper": "",
+"VTripleSplitContainer": "",
 "WindowResizeHandle": ""
 }
 

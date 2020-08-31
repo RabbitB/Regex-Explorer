@@ -4,7 +4,7 @@
 [ext_resource path="res://explorer/explorer.gd" type="Script" id=2]
 [ext_resource path="res://explorer_address_bar/explorer_address_bar.tscn" type="PackedScene" id=3]
 [ext_resource path="res://explorer/validation_indicator.gd" type="Script" id=4]
-[ext_resource path="res://vtri_split_container/vtri_split_container.gd" type="Script" id=5]
+[ext_resource path="res://vtriple_split_container/vtriple_split_container.gd" type="Script" id=5]
 [ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=6]
 [ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=7]
 
@@ -22,6 +22,9 @@ margin_top = 4.0
 margin_right = -4.0
 margin_bottom = -4.0
 alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ExplorerAddressBar" parent="MainVBoxContainer" instance=ExtResource( 3 )]
 anchor_top = 0.0
