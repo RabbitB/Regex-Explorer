@@ -5,9 +5,6 @@
 [ext_resource path="res://explorer_address_bar/directory_up_arrow/dir_up_arrow_down.png" type="Texture" id=3]
 [ext_resource path="res://explorer_address_bar/directory_up_arrow/dir_up_arrow_hover.png" type="Texture" id=4]
 
-
-
-
 [node name="ExplorerAddressBar" type="HBoxContainer"]
 anchor_top = 0.5
 anchor_right = 1.0
@@ -17,6 +14,9 @@ margin_bottom = 12.0
 custom_constants/separation = 4
 alignment = 1
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="AddressLineEdit" type="LineEdit" parent="."]
 margin_right = 941.0
@@ -46,16 +46,15 @@ margin_bottom = 24.0
 text = "Browse"
 
 [node name="FileDialog" type="FileDialog" parent="."]
-margin_left = 749.0
+margin_left = 657.0
 margin_right = 1024.0
-margin_bottom = 130.0
+margin_bottom = 140.0
 popup_exclusive = true
 window_title = "Open a Directory"
 mode = 2
 access = 2
-current_dir = "D:/Projects/Godot/Utilities/Regex Explorer"
-current_path = "D:/Projects/Godot/Utilities/Regex Explorer/"
-
+current_dir = "/Projects/Godot/Utilities/Regex Explorer"
+current_path = "/Projects/Godot/Utilities/Regex Explorer/"
 [connection signal="text_changed" from="AddressLineEdit" to="." method="_on_AddressLineEdit_text_changed"]
 [connection signal="pressed" from="UpDirButton" to="." method="_on_UpDirButton_pressed"]
 [connection signal="pressed" from="BrowseButton" to="." method="_on_BrowseButton_pressed"]
