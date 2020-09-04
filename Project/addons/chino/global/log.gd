@@ -3,7 +3,6 @@ class_name Log
 
 
 static func _call_stack_to_string(call_stack: Array) -> String:
-
 	var output_string: String = ""
 
 	for call in call_stack:
@@ -16,7 +15,6 @@ static func _call_stack_to_string(call_stack: Array) -> String:
 
 
 static func _message(msg: String, msg_args: Array, log_call_stack: bool = false, call_discard_depth: int = 2) -> String:
-
 	var formatted_msg: String = msg % msg_args
 	var stack_output: String
 
@@ -47,19 +45,16 @@ static func _message(msg: String, msg_args: Array, log_call_stack: bool = false,
 
 
 static func error(error_msg: String, msg_args: Array, log_call_stack: bool = false) -> void:
-
 	var logged_msg: String = _message(error_msg, msg_args, log_call_stack)
 	push_error(logged_msg)
 
 
 static func warning(warning_msg: String, msg_args: Array, log_call_stack: bool = false) -> void:
-
 	var logged_msg: String = _message(warning_msg, msg_args, log_call_stack)
 	push_warning(logged_msg)
 
 
 static func get_error_description(error: int) -> String:
-
 	match error:
 		OK:
 			return "OK"
