@@ -4,10 +4,11 @@ extends HBoxContainer
 signal add_rule_pressed()
 signal remove_rule_pressed()
 signal rule_updated()
-signal review_mode_toggled(should_review)
+signal preview_mode_toggled(is_previewing)
 
 export (bool) onready var removable: bool = false setget _set_removable
 export (bool) onready var active: bool = true setget _set_active
+export (bool) onready var force_disabled: bool = false setget _set_force_disabled
 
 var _regex: RegEx = RegEx.new()
 var _dragging_rule: bool = false
@@ -57,6 +58,10 @@ func _set_removable(is_removable: bool) -> void:
 
 
 func _set_active(is_active: bool) -> void:
+	#	The rule can never be active, if it's forced disabled.
+	if force_disabled:
+		is_active = false
+
 	active = is_active
 
 	if active:
@@ -67,6 +72,11 @@ func _set_active(is_active: bool) -> void:
 		self.modulate = Color("808080")
 		_regex_line_edit.editable = false
 		_replacement_line_edit.editable = false
+
+
+func _set_force_disabled(is_disabled: bool) -> void:
+	force_disabled = is_disabled
+	self.active = !force_disabled
 
 
 func _on_AddNewRegexButton_pressed():
@@ -92,11 +102,16 @@ func _on_RegexCompileTimer_timeout():
 
 
 func _on_ReviewRuleRollover_mouse_entered():
-	emit_signal("review_mode_toggled", true)
+	emit_signal("preview_mode_toggled", true)
 
 
 func _on_ReviewRuleRollover_mouse_exited():
-	emit_signal("review_mode_toggled", false)
+	emit_signal("preview_mode_toggled", false)
+
+
+func _on_ReviewRuleRollover_pressed() -> void:
+	self.force_disabled = !self.force_disabled
+	emit_signal("rule_updated")
 
 
 func _on_SwapRuleDirectionButton_pressed():

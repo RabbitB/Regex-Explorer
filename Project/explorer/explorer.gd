@@ -24,7 +24,7 @@ onready var _address_bar: ExplorerAddressBar = get_node(address_bar_path) as Exp
 onready var _valid_dir_indicator: ColorRect = get_node(valid_dir_indicator_path) as ColorRect
 onready var _original_file_list: StatusItemList = get_node(original_file_list_path) as StatusItemList
 onready var _preview_file_list: StatusItemList = get_node(preview_file_list_path) as StatusItemList
-onready var _regex_rule_controller: RegexRuleContainer = get_node(regex_rule_container_path) as RegexRuleContainer
+onready var _regex_rule_container: RegexRuleContainer = get_node(regex_rule_container_path) as RegexRuleContainer
 onready var _rename_files_button: Button = get_node(rename_files_button_path) as Button
 
 
@@ -54,7 +54,7 @@ func preview_list_contains_item_text(item_text: String) -> int:
 	return -1
 
 
-func _update_file_output(review_mode: bool):
+func _update_file_output(in_preview_mode: bool):
 	_preview_file_list.clear()
 
 	for i in range(_original_file_list.get_item_count()):
@@ -71,7 +71,7 @@ func _update_file_output(review_mode: bool):
 		#	We only need to process this item if it's not disabled.
 		#	Otherwise we can pass it along as is.
 		if !item_disabled:
-			new_file_name = _regex_rule_controller.process_string(item_text, review_mode)
+			new_file_name = _regex_rule_container.process_string(item_text, in_preview_mode)
 			sanitized_file_name = _sanitize_file_name(new_file_name)
 
 		var is_valid_name: bool = _validation_regex.search(sanitized_file_name) != null

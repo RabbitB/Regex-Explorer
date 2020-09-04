@@ -95,12 +95,12 @@ func get_insert_index_for_position(position: Vector2) -> int:
 	return -1
 
 
-func process_string(input: String, review_mode: bool = false, using_rules: Array = []) -> String:
+func process_string(input: String, in_preview_mode: bool = false, using_rules: Array = []) -> String:
 	var output_string: String = input
 	var rules: Array = get_rules() if using_rules.empty() else using_rules
 
 	for rule in rules:
-		if rule.active || !review_mode:
+		if !rule.force_disabled && (rule.active || !in_preview_mode):
 			output_string = rule.process_string(output_string)
 
 	return output_string
@@ -130,15 +130,15 @@ func remove_rule(rule_to_remove: RegexRule) -> void:
 	_update_all_rules()
 
 
-func review_rule(should_review: bool, rule_to_review: RegexRule) -> void:
+func preview_rule(should_preview: bool, rule_to_preview: RegexRule) -> void:
 	var rules: Array = get_rules()
-	var rule_index: int = rules.find(rule_to_review)
+	var rule_index: int = rules.find(rule_to_preview)
 
 	if rule_index == -1:
 		rule_index = rules.size()
 
 	for i in rules.size():
-		if !should_review || i <= rule_index:
+		if !should_preview || i <= rule_index:
 			rules[i].active = true
 		else:
 			rules[i].active = false
@@ -150,7 +150,7 @@ func _connect_rule(rule: RegexRule) -> void:
 	rule.connect("add_rule_pressed", self, "insert_rule", [rule])
 	rule.connect("remove_rule_pressed", self, "remove_rule", [rule])
 	rule.connect("rule_updated", self, "_rule_was_updated", [rule])
-	rule.connect("review_mode_toggled", self, "review_rule", [rule])
+	rule.connect("preview_mode_toggled", self, "preview_rule", [rule])
 
 func _update_all_rules() -> void:
 	var rules: Array = get_rules()
