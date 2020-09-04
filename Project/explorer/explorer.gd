@@ -44,6 +44,9 @@ func read_dir_contents(_dir_path: String) -> void:
 			_original_file_list.add_item_with_status(
 					file.name, StatusItemList.ItemStatus.DISABLED_OFF, null, false, true)
 
+		_original_file_list.set_icon_tooltip(_original_file_list.get_item_count() - 1, \
+				"Click to toggle this file on/off for editing.")
+
 	_update_file_output(true)
 
 
