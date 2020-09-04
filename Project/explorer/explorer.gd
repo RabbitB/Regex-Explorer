@@ -1,170 +1,222 @@
 extends Control
 
+
 const ExplorerAddressBar: Script = preload("res://explorer_address_bar/explorer_address_bar.gd")
 const RegexRuleContainer: Script = preload("res://regex_rule_container/regex_rule_container.gd")
+const StatusItemList: Script = preload("res://explorer/status_item_list.gd")
 
-export (Color) var InvalidFileNameHighlightColor = Color8(211, 71, 74)
-export (Color) var ModifiedFileNameHighlightColor = Color8(236, 131, 60)
+const DIR_ICON: Texture = preload("res://explorer/iconography/directory/directory_icon.png")
 
-onready var _AddressBar: ExplorerAddressBar = $MainVBoxContainer/ExplorerAddressBar as ExplorerAddressBar
-onready var _ValidDirIndicator: ColorRect = $MainVBoxContainer/ValidDirIndicator as ColorRect
-onready var _OriginalFileList: ItemList = $MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList as ItemList
-onready var _PreviewFileList: ItemList = $MainVBoxContainer/FileSplitContainer/PreviewFileList as ItemList
-onready var _RegexRuleController: RegexRuleContainer = $MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer/RegexRuleContainer as RegexRuleContainer
-onready var _RenameFilesButton: Button = $MainVBoxContainer/ButtonHBoxContainer/RenameFilesButton as Button
+export (Color) var invalid_filename_highlight_color: Color = Color8(211, 71, 74)
+export (NodePath) var address_bar_path: NodePath
+export (NodePath) var valid_dir_indicator_path: NodePath
+export (NodePath) var original_file_list_path: NodePath
+export (NodePath) var preview_file_list_path: NodePath
+export (NodePath) var regex_rule_container_path: NodePath
+export (NodePath) var rename_files_button_path: NodePath
 
+var _sanitizing_regex_chars: RegEx
+var _sanitizing_regex_postfix: RegEx
+var _sanitizing_regex_names: RegEx
+var _validation_regex: RegEx
 
-func _update_file_output(review_mode: bool):
-
-	_PreviewFileList.clear()
-
-	for i in range(_OriginalFileList.get_item_count()):
-
-		var new_file_name: String = _RegexRuleController.process_string(_OriginalFileList.get_item_text(i), _OriginalFileList.is_selected(i), review_mode)
-		var sanitized_file_name = _sanitize_file_name(new_file_name)
-
-		var validating_regex: RegEx = RegEx.new()
-		validating_regex.compile("\\w+")
-		var is_valid_name: bool = validating_regex.search(sanitized_file_name) != null
-		var is_duplicate_name: bool = preview_list_contains_item_text(sanitized_file_name) != -1
-
-		if is_valid_name && !is_duplicate_name:
-
-			_PreviewFileList.add_item(sanitized_file_name)
-
-			if sanitized_file_name != new_file_name:
-
-				_PreviewFileList.set_item_custom_fg_color(i, ModifiedFileNameHighlightColor)
-				_PreviewFileList.set_item_tooltip(i, "Filename \"%s\" is invalid. Auto-corrected to valid name." % new_file_name)
-
-		else:
-
-			_PreviewFileList.add_item(_OriginalFileList.get_item_text(i))
-			_PreviewFileList.set_item_disabled(i, true)
-			_PreviewFileList.set_item_custom_fg_color(i, InvalidFileNameHighlightColor)
-
-			if is_duplicate_name:
-
-				_PreviewFileList.set_item_text(i, sanitized_file_name)
-				_PreviewFileList.set_item_tooltip(i, "Filename already exists. Cannot rename.")
-
-			else:
-
-				_PreviewFileList.set_item_tooltip(i, "Filename invalid. Could not auto-correct into valid name.")
-
-		var file_icon: Texture = _OriginalFileList.get_item_icon(i)
-		if file_icon: _PreviewFileList.set_item_icon(i, file_icon)
+onready var _address_bar: ExplorerAddressBar = get_node(address_bar_path) as ExplorerAddressBar
+onready var _valid_dir_indicator: ColorRect = get_node(valid_dir_indicator_path) as ColorRect
+onready var _original_file_list: StatusItemList = get_node(original_file_list_path) as StatusItemList
+onready var _preview_file_list: StatusItemList = get_node(preview_file_list_path) as StatusItemList
+onready var _regex_rule_controller: RegexRuleContainer = get_node(regex_rule_container_path) as RegexRuleContainer
+onready var _rename_files_button: Button = get_node(rename_files_button_path) as Button
 
 
-func _sanitize_file_name(file_name: String) -> String:
-
-	var sanitizing_regex: RegEx = RegEx.new()
-
-#	Strip invalid characters
-	sanitizing_regex.compile("[<>:\\\"/\\\\\\|?*]")
-	file_name = sanitizing_regex.sub(file_name, "", true)
-
-#	Strip characters that are only invalid at the end of a file name.
-	sanitizing_regex.compile("[\\.| ]+$")
-	file_name = sanitizing_regex.sub(file_name, "", true)
-
-#	Strip invalid character names.
-	sanitizing_regex.compile("(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])")
-	file_name = sanitizing_regex.sub(file_name.get_file(), "", true)
-
-	return file_name
+func _init() -> void:
+	_setup_regex()
 
 
-func read_dir_contents(dir_path: String) -> void:
-
-	var files: Array = _AddressBar.get_dir_contents()
-	_OriginalFileList.clear()
+func read_dir_contents(_dir_path: String) -> void:
+	var files: Array = _address_bar.get_dir_contents()
+	_original_file_list.clear()
 
 	for file in files:
-
 		if file.is_dir:
-
-			_OriginalFileList.add_item(file.name, preload("res://explorer/directory_icon.png"))
-
+			_original_file_list.add_item_with_status(
+					file.name, StatusItemList.ItemStatus.DISABLED_OFF, DIR_ICON, true, true)
 		else:
-
-			_OriginalFileList.add_item(file.name)
+			_original_file_list.add_item_with_status(
+					file.name, StatusItemList.ItemStatus.DISABLED_OFF, null, false, true)
 
 	_update_file_output(true)
 
 
 func preview_list_contains_item_text(item_text: String) -> int:
-
-	for i in range(_PreviewFileList.get_item_count()):
-		if _PreviewFileList.get_item_text(i) == item_text: return i
+	for i in range(_preview_file_list.get_item_count()):
+		if _preview_file_list.get_item_text(i) == item_text: return i
 
 	return -1
 
 
+func _update_file_output(review_mode: bool):
+	_preview_file_list.clear()
+
+	for i in range(_original_file_list.get_item_count()):
+		#	Icon items are there solely for UI reasons,
+		#	and not actually a filesystem item that needs to be processed.
+		if _original_file_list.is_icon(i):
+			continue
+
+		var item_disabled: bool = _original_file_list.get_item_status(i) == StatusItemList.ItemStatus.DISABLED_ON
+		var item_text: String = _original_file_list.get_item_text(i)
+		var new_file_name: String = item_text
+		var sanitized_file_name: String = item_text
+
+		#	We only need to process this item if it's not disabled.
+		#	Otherwise we can pass it along as is.
+		if !item_disabled:
+			new_file_name = _regex_rule_controller.process_string(item_text, review_mode)
+			sanitized_file_name = _sanitize_file_name(new_file_name)
+
+		var is_valid_name: bool = _validation_regex.search(sanitized_file_name) != null
+		var duplicate_name_idx: int = preview_list_contains_item_text(sanitized_file_name)
+		var new_item_idx: int = _preview_file_list.get_item_count()
+
+		#	No changes made, because the item is disabled.
+		if item_disabled:
+			_preview_file_list.add_item_with_status(
+					item_text, StatusItemList.ItemStatus.DISABLED_OFF, null, false, false)
+			_preview_file_list.set_item_disabled(new_item_idx + 1, true)
+
+		#	Did not produce a valid filename after processing.
+		elif !is_valid_name:
+			_preview_file_list.add_item_with_status(
+					item_text, StatusItemList.ItemStatus.INVALID, null, false, false)
+			_preview_file_list.set_item_disabled(new_item_idx + 1, true)
+			_preview_file_list.set_icon_tooltip(new_item_idx, \
+					"Filename invalid. Could not auto-correct into a valid name.")
+
+		#	Processing the filename produced a name that's a duplicate of another file.
+		elif duplicate_name_idx != -1:
+			_preview_file_list.add_item_with_status(
+					sanitized_file_name, StatusItemList.ItemStatus.INVALID, null, false, false)
+			_preview_file_list.set_icon_tooltip(new_item_idx, "Duplicate filenames. Skipping file.")
+			_preview_file_list.set_item_disabled(new_item_idx + 1, true)
+
+			_preview_file_list.change_item_status(duplicate_name_idx, StatusItemList.ItemStatus.INVALID)
+			_preview_file_list.set_icon_tooltip(duplicate_name_idx, "Duplicate filenames. Skipping file.")
+			_preview_file_list.set_item_disabled(duplicate_name_idx, true)
+
+		#	The processed filename is valid, but it had errors that could be auto-corrected.
+		elif sanitized_file_name != new_file_name:
+			_preview_file_list.add_item_with_status(
+					sanitized_file_name, StatusItemList.ItemStatus.MODIFIED, null, false, false)
+			_preview_file_list.set_icon_tooltip(new_item_idx, \
+					"Filename \"%s\" is invalid. Auto-corrected to a valid name." % new_file_name)
+
+		#	No issues found with the newly processed name.
+		else:
+			_preview_file_list.add_item_with_status(
+					sanitized_file_name, StatusItemList.ItemStatus.VALID, null, false, false)
+
+		#	Add the directory icon to the text, if the original item was a directory.
+		if _original_file_list.get_item_icon(i) == DIR_ICON:
+			_preview_file_list.set_item_icon(new_item_idx + 1, DIR_ICON)
+
+
+func _setup_regex() -> void:
+	_sanitizing_regex_chars = RegEx.new()
+	_sanitizing_regex_chars.compile("[<>:\\\"/\\\\\\|?*]")
+
+	_sanitizing_regex_postfix = RegEx.new()
+	_sanitizing_regex_postfix.compile("[\\.| ]+$")
+
+	_sanitizing_regex_names = RegEx.new()
+	_sanitizing_regex_names.compile("(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])")
+
+	_validation_regex = RegEx.new()
+	_validation_regex.compile("\\w+")
+
+
+func _sanitize_file_name(file_name: String) -> String:
+#	Strip invalid characters
+	file_name = _sanitizing_regex_chars.sub(file_name, "", true)
+
+#	Strip characters that are only invalid at the end of a file name.
+	file_name = _sanitizing_regex_postfix.sub(file_name, "", true)
+
+#	Strip invalid character names.
+	file_name = _sanitizing_regex_names.sub(file_name.get_file(), "", true)
+
+	return file_name
+
+
 func _on_ExplorerAddressBar_path_changed(path: String, is_path_valid: bool):
+	_valid_dir_indicator.valid = is_path_valid
 
-	_ValidDirIndicator.valid = is_path_valid
-
-	if _AddressBar.encountered_error():
-
-		_RenameFilesButton.disabled = true
-		_RenameFilesButton.hint_tooltip = "Encountered the error: \"%s\" with the current directory." % [ProjectTools.error_description(_AddressBar.encountered_error())]
-
+	if _address_bar.encountered_error():
+		_rename_files_button.disabled = true
+		_rename_files_button.hint_tooltip = "Encountered the error: \"%s\" with the current directory." \
+				% [Log.get_error_description(_address_bar.encountered_error())]
 	elif !is_path_valid:
-
-		_RenameFilesButton.disabled = true
-		_RenameFilesButton.hint_tooltip = ""
-
+		_rename_files_button.disabled = true
+		_rename_files_button.hint_tooltip = "Not a valid directory path."
 	else:
-
 		read_dir_contents(path)
-		_RenameFilesButton.disabled = false
-		_RenameFilesButton.hint_tooltip = ""
+		_rename_files_button.disabled = false
+		_rename_files_button.hint_tooltip = ""
 
 
 func _on_RenameFilesButton_pressed():
-
-	if !_AddressBar.is_path_valid() || _AddressBar.encountered_error():
+	if !_address_bar.is_path_valid() || _address_bar.encountered_error():
 		return
 
-	var dir: Directory = _AddressBar.get_directory()
-	var error: int
-
-	var active_path: String = _AddressBar.get_active_path()
+	var dir: Directory = _address_bar.get_directory()
+	var active_path: String = _address_bar.get_active_path()
 
 	_update_file_output(false)
 
-	for i in range(_PreviewFileList.get_item_count()):
+	for i in range(_preview_file_list.get_item_count()):
+		if _preview_file_list.is_icon(i):
+			continue
 
-		if _PreviewFileList.is_item_disabled(i): continue
+		var item_status: int = _preview_file_list.get_item_status(i)
+		if item_status != StatusItemList.ItemStatus.VALID && item_status != StatusItemList.ItemStatus.MODIFIED:
+			continue
 
-		var new_file_name: String = _PreviewFileList.get_item_text(i)
-		var old_file_name: String = _OriginalFileList.get_item_text(i)
+		var new_file_name: String = _preview_file_list.get_item_text(i)
+		var old_file_name: String = _original_file_list.get_item_text(i)
 
 		if new_file_name == old_file_name:
 			continue
 
-		error = dir.rename(active_path.plus_file(old_file_name), active_path.plus_file(new_file_name))
-
+		var error: int = dir.rename(active_path.plus_file(old_file_name), active_path.plus_file(new_file_name))
 		if error:
-
-			_PreviewFileList.set_item_disabled(i, true)
-			_PreviewFileList.set_item_custom_fg_color(i, InvalidFileNameHighlightColor)
-			_PreviewFileList.set_item_tooltip(i, \
-					"Encountered error: \"%s\" when renaming file \"%s\" to \"%s\"." % [ProjectTools.error_description(error), old_file_name, new_file_name])
+			_preview_file_list.change_item_status(i, StatusItemList.ItemStatus.INVALID)
+			_preview_file_list.set_icon_tooltip(i, \
+					"Encountered error: \"%s\" when renaming file \"%s\" to \"%s\"." % \
+					[Log.get_error_description(error), old_file_name, new_file_name])
+			_preview_file_list.set_item_disabled(i, true)
 
 	read_dir_contents(active_path)
 
 
-func _on_OriginalFileList_multi_selected(index, selected):
+func _on_OriginalFileList_item_selected(index: int) -> void:
+	if !_original_file_list.is_icon(index):
+		return
+
+	var item_status: int = _original_file_list.get_item_status(index)
+
+	if item_status == StatusItemList.ItemStatus.DISABLED_OFF:
+		_original_file_list.change_item_status(index, StatusItemList.ItemStatus.DISABLED_ON)
+		_original_file_list.unselect(index)
+	elif item_status == StatusItemList.ItemStatus.DISABLED_ON:
+		_original_file_list.change_item_status(index, StatusItemList.ItemStatus.DISABLED_OFF)
+		_original_file_list.unselect(index)
 
 	_update_file_output(true)
 
 
 func _on_OriginalFileList_item_activated(index):
+	var text_at_index: String = _original_file_list.get_item_text(index)
+	var new_path: String = _address_bar.get_active_path().plus_file(text_at_index)
 
-	var new_path: String = _AddressBar.get_active_path().plus_file(_OriginalFileList.get_item_text(index))
-
-	if _AddressBar.is_path_valid(new_path):
-		_AddressBar.update_path(new_path, true)
+	if !text_at_index.empty() && _address_bar.is_path_valid(new_path):
+		_address_bar.update_path(new_path, true)
 

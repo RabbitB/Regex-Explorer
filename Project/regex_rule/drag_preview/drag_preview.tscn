@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://regex_rule/move_rule/move_handle_hover.png" type="Texture" id=1]
+[ext_resource path="res://regex_rule/move_rule/move_handle.png" type="Texture" id=2]
+[ext_resource path="res://regex_rule/move_rule/move_handle_down.png" type="Texture" id=3]
+[ext_resource path="res://regex_rule/rule_swap_direction/rule_swap_direction.png" type="Texture" id=4]
+[ext_resource path="res://regex_rule/rule_swap_direction/rule_swap_direction_down.png" type="Texture" id=5]
+[ext_resource path="res://regex_rule/rule_swap_direction/rule_swap_direction_hover.png" type="Texture" id=6]
+[ext_resource path="res://regex_rule/drag_preview/drag_preview.gd" type="Script" id=7]
+
+[node name="RegexRuleStandin" type="HBoxContainer"]
+anchor_right = 1.0
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DragRegexHandle" type="TextureButton" parent="."]
+margin_top = 3.0
+margin_right = 16.0
+margin_bottom = 19.0
+hint_tooltip = "Reorder this regex rule."
+focus_mode = 0
+mouse_default_cursor_shape = 13
+size_flags_vertical = 4
+disabled = true
+enabled_focus_mode = 0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 1 )
+texture_disabled = ExtResource( 3 )
+
+[node name="RegexLineEdit" type="LineEdit" parent="."]
+margin_left = 20.0
+margin_right = 510.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+editable = false
+placeholder_text = "Regular Expression"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="SwapRuleDirectionButton" type="TextureButton" parent="."]
+margin_left = 514.0
+margin_top = 3.0
+margin_right = 530.0
+margin_bottom = 19.0
+hint_tooltip = "Swap the regular expression with the replacement text."
+focus_mode = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+disabled = true
+enabled_focus_mode = 0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
+texture_hover = ExtResource( 6 )
+texture_disabled = ExtResource( 5 )
+
+[node name="ReplacementLineEdit" type="LineEdit" parent="."]
+margin_left = 534.0
+margin_right = 1024.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+editable = false
+placeholder_text = "Replacement Text"
+caret_blink = true
+caret_blink_speed = 0.5

@@ -10,6 +10,7 @@ export (bool) onready var removable: bool = false setget _set_removable
 export (bool) onready var active: bool = true setget _set_active
 
 var _regex: RegEx = RegEx.new()
+var _dragging_rule: bool = false
 
 onready var _delete_regex_btn: TextureButton = $DeleteRegexButton as TextureButton
 
@@ -18,11 +19,18 @@ onready var _regex_compile_timer: Timer = $RegexCompileTimer as Timer
 
 onready var _regex_line_edit: LineEdit = $RegexLineEdit as LineEdit
 onready var _replacement_line_edit: LineEdit = $ReplacementLineEdit as LineEdit
-onready var _affects_selected_checkbox: CheckBox = $AffectsSelectedFilesCheckBox as CheckBox
 
 
 func _ready() -> void:
 	compile_regex()
+
+
+func regex_text() -> String:
+	return _regex_line_edit.text
+
+
+func replacement_text() -> String:
+	return _replacement_line_edit.text
 
 
 func process_string(input: String) -> String:
@@ -41,10 +49,6 @@ func compile_regex() -> bool:
 
 func compiled_regex_is_valid() -> bool:
 	return _valid_regex_indicator.valid
-
-
-func affects_all_files() -> bool:
-	return !_affects_selected_checkbox.pressed
 
 
 func _set_removable(is_removable: bool) -> void:
@@ -73,22 +77,18 @@ func _on_DeleteRegexButton_pressed():
 	emit_signal("remove_rule_pressed")
 
 
-func _on_RegexLineEdit_text_changed(new_text: String) -> void:
+func _on_RegexLineEdit_text_changed(_new_text: String) -> void:
 	_valid_regex_indicator.standby = true
 	_regex_compile_timer.start()
 
 
-func _on_ReplacementLineEdit_text_changed(new_text: String) -> void:
+func _on_ReplacementLineEdit_text_changed(_new_text: String) -> void:
 	emit_signal("rule_updated")
 
 
 func _on_RegexCompileTimer_timeout():
 	_valid_regex_indicator.standby = false
 	compile_regex()
-
-
-func _on_AffectsSelectedFilesCheckBox_toggled(button_pressed):
-	emit_signal("rule_updated")
 
 
 func _on_ReviewRuleRollover_mouse_entered():

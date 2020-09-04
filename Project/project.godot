@@ -98,7 +98,6 @@ config/windows_native_icon="res://icon/icon.ico"
 
 [debug]
 
-gdscript/warnings/unused_argument=false
 gdscript/warnings/return_value_discarded=false
 
 [display]

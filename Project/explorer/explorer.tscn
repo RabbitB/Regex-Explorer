@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://alien_theme.tres" type="Theme" id=1]
 [ext_resource path="res://explorer/explorer.gd" type="Script" id=2]
@@ -7,12 +7,22 @@
 [ext_resource path="res://vtriple_split_container/vtriple_split_container.gd" type="Script" id=5]
 [ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=6]
 [ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=7]
+[ext_resource path="res://explorer/status_item_list.gd" type="Script" id=8]
 
 [node name="Explorer" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+address_bar_path = NodePath("MainVBoxContainer/ExplorerAddressBar")
+valid_dir_indicator_path = NodePath("MainVBoxContainer/ValidDirIndicator")
+original_file_list_path = NodePath("MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList")
+preview_file_list_path = NodePath("MainVBoxContainer/FileSplitContainer/PreviewFileList")
+regex_rule_container_path = NodePath("MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer/RegexRuleContainer")
+rename_files_button_path = NodePath("MainVBoxContainer/ButtonHBoxContainer/RenameFilesButton")
 
 [node name="MainVBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -51,6 +61,7 @@ size_flags_vertical = 3
 [node name="RuleSplitContainer" type="VSplitContainer" parent="MainVBoxContainer/FileSplitContainer"]
 margin_right = 1016.0
 margin_bottom = 262.0
+rect_min_size = Vector2( 0, 262 )
 size_flags_vertical = 3
 script = ExtResource( 5 )
 
@@ -59,14 +70,16 @@ margin_right = 1016.0
 margin_bottom = 189.0
 rect_min_size = Vector2( 0, 150 )
 size_flags_vertical = 3
-select_mode = 1
 allow_reselect = true
+max_columns = 2
+script = ExtResource( 8 )
 
 [node name="RegexRuleScrollContainer" type="ScrollContainer" parent="MainVBoxContainer/FileSplitContainer/RuleSplitContainer"]
 margin_top = 197.0
 margin_right = 1016.0
 margin_bottom = 262.0
 rect_min_size = Vector2( 0, 65 )
+follow_focus = true
 scroll_horizontal_enabled = false
 
 [node name="RegexRuleContainer" parent="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer" instance=ExtResource( 6 )]
@@ -83,6 +96,8 @@ margin_right = 1016.0
 margin_bottom = 532.0
 rect_min_size = Vector2( 0, 150 )
 size_flags_vertical = 3
+max_columns = 2
+script = ExtResource( 8 )
 
 [node name="ButtonHBoxContainer" type="HBoxContainer" parent="MainVBoxContainer"]
 margin_top = 570.0
@@ -104,6 +119,6 @@ text = "Rename Files"
 [node name="WindowResizeHandles" parent="." instance=ExtResource( 7 )]
 [connection signal="path_changed" from="MainVBoxContainer/ExplorerAddressBar" to="." method="_on_ExplorerAddressBar_path_changed" flags=3]
 [connection signal="item_activated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_item_activated"]
-[connection signal="multi_selected" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_multi_selected"]
+[connection signal="item_selected" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/OriginalFileList" to="." method="_on_OriginalFileList_item_selected"]
 [connection signal="rules_updated" from="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer/RegexRuleContainer" to="." method="_update_file_output" flags=3 binds= [ true ]]
 [connection signal="pressed" from="MainVBoxContainer/ButtonHBoxContainer/RenameFilesButton" to="." method="_on_RenameFilesButton_pressed"]
