@@ -6,6 +6,7 @@ const RegexRuleContainer: Script = preload("res://regex_rule_container/regex_rul
 const StatusItemList: Script = preload("res://explorer/status_item_list.gd")
 
 const DIR_ICON: Texture = preload("res://explorer/iconography/directory/directory_icon.png")
+const CONFIG_FILE_PATH: String = "user://config.cfg"
 
 export (Color) var invalid_filename_highlight_color: Color = Color8(211, 71, 74)
 export (NodePath) var address_bar_path: NodePath
@@ -19,6 +20,7 @@ var _sanitizing_regex_chars: RegEx
 var _sanitizing_regex_postfix: RegEx
 var _sanitizing_regex_names: RegEx
 var _validation_regex: RegEx
+var _config_file: ConfigFile
 
 onready var _address_bar: ExplorerAddressBar = get_node(address_bar_path) as ExplorerAddressBar
 onready var _valid_dir_indicator: ColorRect = get_node(valid_dir_indicator_path) as ColorRect
@@ -30,6 +32,27 @@ onready var _rename_files_button: Button = get_node(rename_files_button_path) as
 
 func _init() -> void:
 	_setup_regex()
+	_config_file = ConfigFile.new()
+
+
+func _ready() -> void:
+	var error: int = _config_file.load(CONFIG_FILE_PATH)
+	if error:
+		Log.error("Could not load the config file. Using default settings.")
+
+	#	If found, the address bar will auto-update to the last used path. Otherwise it will keep its default
+	#	path.
+	if _config_file.has_section_key("tracked", "last_accessed_dir"):
+		_address_bar.update_path(_config_file.get_value("tracked", "last_accessed_dir"), true)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_QUIT_REQUEST && _address_bar.is_path_valid():
+		_config_file.set_value("tracked", "last_accessed_dir", _address_bar.get_active_path())
+
+		var error: int = _config_file.save(CONFIG_FILE_PATH)
+		if error:
+			Log.error("Could not save the config file. Any changes will be lost.")
 
 
 func read_dir_contents(_dir_path: String) -> void:

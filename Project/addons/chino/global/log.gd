@@ -44,12 +44,12 @@ static func _message(msg: String, msg_args: Array, log_call_stack: bool = false,
 	return formatted_msg
 
 
-static func error(error_msg: String, msg_args: Array, log_call_stack: bool = false) -> void:
+static func error(error_msg: String, msg_args: Array = [], log_call_stack: bool = false) -> void:
 	var logged_msg: String = _message(error_msg, msg_args, log_call_stack)
 	push_error(logged_msg)
 
 
-static func warning(warning_msg: String, msg_args: Array, log_call_stack: bool = false) -> void:
+static func warning(warning_msg: String, msg_args: Array = [], log_call_stack: bool = false) -> void:
 	var logged_msg: String = _message(warning_msg, msg_args, log_call_stack)
 	push_warning(logged_msg)
 
