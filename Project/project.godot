@@ -87,6 +87,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Regex Explorer"
+config/description="A file directory explorer that supports compound regex renaming of files and directories."
 run/main_scene="res://explorer/explorer.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="dfaction/regex_explorer"

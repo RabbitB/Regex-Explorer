@@ -106,13 +106,7 @@ margin_top = 570.0
 margin_right = 1016.0
 margin_bottom = 592.0
 
-[node name="RegexLibraryButton" type="Button" parent="MainVBoxContainer/ButtonHBoxContainer"]
-margin_right = 97.0
-margin_bottom = 22.0
-text = "Regex Library"
-
 [node name="RenameFilesButton" type="Button" parent="MainVBoxContainer/ButtonHBoxContainer"]
-margin_left = 101.0
 margin_right = 1016.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
