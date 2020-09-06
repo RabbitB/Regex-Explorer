@@ -26,6 +26,10 @@ func _ready() -> void:
 	compile_regex()
 
 
+func can_drop_data(_position: Vector2, data) -> bool:
+	return data is get_script()
+
+
 func regex_text() -> String:
 	return _regex_line_edit.text
 

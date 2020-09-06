@@ -6,6 +6,7 @@
 [node name="RegexRuleContainer" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_constants/separation = 6
 alignment = 1
 script = ExtResource( 1 )
 __meta__ = {
@@ -14,6 +15,6 @@ __meta__ = {
 
 [node name="DefaultRegexRule" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
-margin_top = 288.0
+margin_top = 289.0
 margin_right = 1024.0
-margin_bottom = 312.0
+margin_bottom = 311.0

@@ -8,49 +8,35 @@ const RegexRuleScene: PackedScene = preload("res://regex_rule/regex_rule.tscn")
 const RulePlaceholder: Script = preload("res://regex_rule/rule_placeholder/rule_placeholder.gd")
 const RulePlaceholderScene: PackedScene = preload("res://regex_rule/rule_placeholder/rule_placeholder.tscn")
 
-var _rule_placeholder: RulePlaceholder = null
 var _dragged_rule: RegexRule
-var _dragged_rule_original_index: int = 0
-var _valid_drag_drop: bool = false
 
 
 func _ready() -> void:
+	set_process(false)
 	_update_all_rules()
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_BEGIN && get_viewport().gui_get_drag_data() is RegexRule:
 		_dragged_rule = get_viewport().gui_get_drag_data()
-		_dragged_rule_original_index = _dragged_rule.get_index()
+		set_process(true)
 	elif what == NOTIFICATION_DRAG_END:
-		if !_valid_drag_drop:
-			move_child(_dragged_rule, _dragged_rule_original_index)
+		if _dragged_rule:
+			emit_signal("rules_updated")
 
 		_dragged_rule = null
-		_valid_drag_drop = false
-		_dragged_rule_original_index = 0
+		set_process(false)
+
+
+func _process(delta: float) -> void:
+	if _dragged_rule:
+		var insert_idx: int = get_insert_index_for_position(get_local_mouse_position())
+		if insert_idx != -1:
+			move_child(_dragged_rule, insert_idx)
 
 
 func can_drop_data(position: Vector2, data) -> bool:
-	if data is RegexRule:
-		var insert_index: int = get_insert_index_for_position(position)
-		if insert_index != -1:
-			move_child(data, insert_index)
-
-		return true
-
-	return false
-
-
-func drop_data(position: Vector2, data) -> void:
-	_valid_drag_drop = false
-
-	if data is RegexRule:
-		var insert_index: int = get_insert_index_for_position(position)
-		if insert_index != -1:
-			move_child(data, get_insert_index_for_position(position))
-
-		_valid_drag_drop = true
+	return data is RegexRule
 
 
 func get_insert_index_for_position(position: Vector2) -> int:
