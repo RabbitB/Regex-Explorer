@@ -44,6 +44,6 @@ func _on_resized() -> void:
 	clamp_split_offset()
 
 
-func _on_dragged(offset: int) -> void:
+func _on_dragged(_offset: int) -> void:
 	_update_min_size()
 

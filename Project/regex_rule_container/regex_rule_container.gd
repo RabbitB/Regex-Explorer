@@ -28,14 +28,14 @@ func _notification(what: int) -> void:
 		set_process(false)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if _dragged_rule:
 		var insert_idx: int = get_insert_index_for_position(get_local_mouse_position())
 		if insert_idx != -1:
 			move_child(_dragged_rule, insert_idx)
 
 
-func can_drop_data(position: Vector2, data) -> bool:
+func can_drop_data(_position: Vector2, data) -> bool:
 	return data is RegexRule
 
 
