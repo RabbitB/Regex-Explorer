@@ -116,5 +116,6 @@ theme/custom="res://alien_theme.tres"
 
 [rendering]
 
+quality/driver/fallback_to_gles2=true
 environment/default_clear_color=Color( 0.133333, 0.133333, 0.133333, 1 )
 environment/default_environment="res://default_env.tres"
