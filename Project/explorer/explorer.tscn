@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://alien_theme.tres" type="Theme" id=1]
 [ext_resource path="res://explorer/explorer.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://regex_rule_container/regex_rule_container.tscn" type="PackedScene" id=6]
 [ext_resource path="res://window_resize_handles/window_resize_handles.tscn" type="PackedScene" id=7]
 [ext_resource path="res://explorer/status_item_list.gd" type="Script" id=8]
+[ext_resource path="res://explorer/drag_aware_scroll_container.gd" type="Script" id=9]
 
 [node name="Explorer" type="Control"]
 anchor_right = 1.0
@@ -81,6 +82,7 @@ margin_bottom = 262.0
 rect_min_size = Vector2( 0, 65 )
 follow_focus = true
 scroll_horizontal_enabled = false
+script = ExtResource( 9 )
 
 [node name="RegexRuleContainer" parent="MainVBoxContainer/FileSplitContainer/RuleSplitContainer/RegexRuleScrollContainer" instance=ExtResource( 6 )]
 anchor_right = 0.0

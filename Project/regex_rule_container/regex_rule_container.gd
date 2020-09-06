@@ -36,15 +36,6 @@ func can_drop_data(position: Vector2, data) -> bool:
 		var insert_index: int = get_insert_index_for_position(position)
 		if insert_index != -1:
 			move_child(data, insert_index)
-#
-#			if !_rule_placeholder:
-#				_rule_placeholder = RulePlaceholderScene.instance()
-#				add_child(_rule_placeholder)
-#
-#			if _rule_placeholder.get_index() != insert_index:
-#				_rule_placeholder.expand()
-#				move_child(_rule_placeholder, insert_index)
-
 
 		return true
 
