@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://explorer_address_bar/explorer_address_bar.gd" type="Script" id=1]
 [ext_resource path="res://explorer_address_bar/directory_up_arrow/dir_up_arrow.png" type="Texture" id=2]
 [ext_resource path="res://explorer_address_bar/directory_up_arrow/dir_up_arrow_down.png" type="Texture" id=3]
 [ext_resource path="res://explorer_address_bar/directory_up_arrow/dir_up_arrow_hover.png" type="Texture" id=4]
+[ext_resource path="res://explorer_address_bar/refresh_arrow/refresh_arrow.png" type="Texture" id=5]
+[ext_resource path="res://explorer_address_bar/refresh_arrow/refresh_arrow_down.png" type="Texture" id=6]
+[ext_resource path="res://explorer_address_bar/refresh_arrow/refresh_arrow_hover.png" type="Texture" id=7]
 
 [node name="ExplorerAddressBar" type="HBoxContainer"]
 anchor_top = 0.5
@@ -19,7 +22,7 @@ __meta__ = {
 }
 
 [node name="AddressLineEdit" type="LineEdit" parent="."]
-margin_right = 941.0
+margin_right = 921.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 clear_button_enabled = true
@@ -27,9 +30,9 @@ placeholder_text = "Regex Target Directory"
 caret_blink = true
 
 [node name="UpDirButton" type="TextureButton" parent="."]
-margin_left = 945.0
+margin_left = 925.0
 margin_top = 4.0
-margin_right = 961.0
+margin_right = 941.0
 margin_bottom = 20.0
 hint_tooltip = "Goto Parent Dir"
 size_flags_horizontal = 4
@@ -37,6 +40,19 @@ size_flags_vertical = 4
 texture_normal = ExtResource( 2 )
 texture_pressed = ExtResource( 3 )
 texture_hover = ExtResource( 4 )
+stretch_mode = 5
+
+[node name="RefreshButton" type="TextureButton" parent="."]
+margin_left = 945.0
+margin_top = 4.0
+margin_right = 961.0
+margin_bottom = 20.0
+hint_tooltip = "Refresh Directory"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 7 )
 stretch_mode = 5
 
 [node name="BrowseButton" type="Button" parent="."]
@@ -57,5 +73,6 @@ current_dir = "/Projects/Godot/Utilities/Regex Explorer"
 current_path = "/Projects/Godot/Utilities/Regex Explorer/"
 [connection signal="text_changed" from="AddressLineEdit" to="." method="_on_AddressLineEdit_text_changed"]
 [connection signal="pressed" from="UpDirButton" to="." method="_on_UpDirButton_pressed"]
+[connection signal="pressed" from="RefreshButton" to="." method="_on_RefreshButton_pressed"]
 [connection signal="pressed" from="BrowseButton" to="." method="_on_BrowseButton_pressed"]
 [connection signal="dir_selected" from="FileDialog" to="." method="_on_FileDialog_dir_selected"]

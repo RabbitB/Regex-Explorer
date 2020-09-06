@@ -90,6 +90,11 @@ func _on_UpDirButton_pressed() -> void:
 	update_path(_target_dir.get_current_dir(), true)
 
 
+func _on_RefreshButton_pressed() -> void:
+	if is_path_valid() && !_error:
+		update_path(_target_dir.get_current_dir(), true)
+
+
 func _on_BrowseButton_pressed() -> void:
 	var file_dialog_min_size: Vector2 = get_viewport().size - Vector2(50, 75)
 	browse_file_dialog.popup_centered(file_dialog_min_size)
