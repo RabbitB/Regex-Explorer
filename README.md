@@ -1,4 +1,5 @@
 # Regex Explorer
+### [Releases available on itch.io](https://dfaction.itch.io/regex-explorer)
 
 A simple file directory explorer that supports compound regex renaming of files and directories, with live preview of changes. The intent of the project is to provide similar utility as can be found in tools like Microsoft's **PowerRename**, but easier to write and perform complex regex operations.
 
